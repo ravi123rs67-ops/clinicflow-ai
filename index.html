@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Healthcare Appointment System - Dashboard</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.15);
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.15);
+            --warning: #f59e0b;
+            --warning-glow: rgba(245, 158, 11, 0.15);
+            --error: #ef4444;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --glass-blur: 16px;
+            --agent1-color: #a855f7;
+            --agent2-color: #3b82f6;
+            --agent3-color: #10b981;
+            --agent4-color: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Top Navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 2rem;
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #3b82f6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo i {
+            -webkit-text-fill-color: initial;
+            color: #3b82f6;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .indicator.active {
+            background-color: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .indicator.sim {
+            background-color: var(--warning);
+            box-shadow: 0 0 8px var(--warning);
+        }
+
+        /* Main Workspace Layout */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            padding: 1.5rem;
+            gap: 1.5rem;
+        }
+
+        /* Glassmorphic Panel Base */
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.3s ease;
+        }
+
+        /* Left Panel: Chat Interface */
+        .chat-panel {
+            width: 380px;
+            flex-shrink: 0;
+        }
+
+        .panel-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .panel-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-header h2 i {
+            color: var(--primary);
+        }
+
+        .chat-history {
+            flex: 1;
+            padding: 1.25rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.85rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .message-bubble.user {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .message-bubble.system {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            border: 1px solid var(--border-color);
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        input, textarea, select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-glow);
+        }
+
+        .chat-input {
+            flex: 1;
+            resize: none;
+            height: 42px;
+        }
+
+        .send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .send-btn:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tag-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Right Panel: Content tabs & logs */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabs-header {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.01);
+            padding: 0.5rem 1rem 0;
+            gap: 0.5rem;
+        }
+
+        .tab-link {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-link:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tab-link.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tab 1: Google Sheet View */
+        .sheet-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sheet-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4ade80;
+        }
+
+        .slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .slot-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .slot-card.available {
+            border-left: 3px solid var(--success);
+        }
+
+        .slot-card.booked {
+            border-left: 3px solid var(--error);
+            opacity: 0.6;
+        }
+
+        .appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .appointments-table th {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .appointments-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge.success {
+            background: var(--success-glow);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .badge.warning {
+            background: var(--warning-glow);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        /* Tab 2: WhatsApp Messages Logs */
+        .msg-history {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .whatsapp-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .whatsapp-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .whatsapp-card.confirm::before { background-color: var(--agent2-color); }
+        .whatsapp-card.reminder::before { background-color: var(--agent3-color); }
+        .whatsapp-card.followup::before { background-color: var(--agent4-color); }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .whatsapp-card.confirm .avatar-circle { color: var(--agent2-color); background: rgba(59, 130, 246, 0.1); }
+        .whatsapp-card.reminder .avatar-circle { color: var(--agent3-color); background: rgba(16, 185, 129, 0.1); }
+        .whatsapp-card.followup .avatar-circle { color: var(--agent4-color); background: rgba(245, 158, 11, 0.1); }
+
+        .msg-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .msg-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .msg-body {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.01);
+            padding: 0.5rem;
+            border-radius: 6px;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Tab 3: Agent Trace */
+        .trace-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            gap: 1rem;
+        }
+
+        .trace-filter {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary-glow);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .trace-terminal {
+            flex: 1;
+            background: #020617;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            min-height: 300px;
+            max-height: 450px;
+        }
+
+        .trace-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            padding-bottom: 0.5rem;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .trace-header-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+        }
+
+        .trace-time { color: #475569; }
+        
+        .trace-agent { font-weight: 600; }
+        .trace-agent.intake { color: var(--agent1-color); }
+        .trace-agent.scheduling { color: var(--agent2-color); }
+        .trace-agent.reminder { color: var(--agent3-color); }
+        .trace-agent.return { color: var(--agent4-color); }
+        .trace-agent.system { color: #94a3b8; }
+
+        .trace-type {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .trace-type.thought { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+        .trace-type.tool_call { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .trace-type.tool_result { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        .trace-type.response { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        .trace-type.info { background: rgba(255, 255, 255, 0.1); color: #f1f5f9; }
+
+        .trace-body {
+            line-height: 1.5;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+        }
+
+        /* Bottom Controls Center */
+        .controls-panel {
+            padding: 1.25rem 2rem;
+            background: rgba(11, 15, 25, 0.6);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .agent-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .action-btn.primary {
+            background: var(--primary-glow);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        .action-btn.primary:hover {
+            background: rgba(59, 130, 246, 0.25);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .action-btn.success {
+            background: var(--success-glow);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .action-btn.success:hover {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .action-btn.danger {
+            background: rgba(239, 68, 68, 0.08);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        .action-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-laptop-medical"></i>
+            <span>Google ADK 2.0 Healthcare Booking System</span>
+        </div>
+        <div class="status-bar">
+            <div class="status-item">
+                <span id="gemini-light" class="indicator active"></span>
+                <span>Gemini: <strong id="gemini-status">Checking...</strong></span>
+            </div>
+            <div class="status-item">
+                <span id="sheets-light" class="indicator active"></span>
+                <span>Google Sheet: <strong id="sheets-status">Checking...</strong></span>
+            </div>
+            <div class="status-item">
+                <span id="twilio-light" class="indicator active"></span>
+                <span>Twilio WhatsApp: <strong id="twilio-status">Checking...</strong></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Left Panel: Patient Chat Simulation -->
+        <div class="glass-panel chat-panel">
+            <div class="panel-header">
+                <h2><i class="fa-brands fa-whatsapp"></i> Patient Booking Chat</h2>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Simulated WhatsApp</span>
+            </div>
+            
+            <div class="chat-history" id="chat-history">
+                <div class="message-bubble system">
+                    Hello! I am your AI Intake Assistant. Please send me your full name, symptoms, and preferred date to book an appointment.
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <div class="input-group">
+                    <input type="text" id="phone-input" placeholder="Patient Phone (e.g. +1234567)" value="+1 (555) 019-9999" style="width: 100%;">
+                </div>
+                <div class="input-group">
+                    <textarea class="chat-input" id="message-input" placeholder="Type booking request..."></textarea>
+                    <button class="send-btn" id="send-btn" onclick="sendBookingRequest()">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="quick-actions">
+                    <button class="tag-btn" onclick="setQuickMessage('Hi, I am John Miller. I have a severe headache and want an appointment for tomorrow.')">Headache (Tomorrow)</button>
+                    <button class="tag-btn" onclick="setQuickMessage('Hello, my name is Alice Smith. I am suffering from stomach pain and would like to schedule a slot for the day after tomorrow.')">Stomach Pain</button>
+                    <button class="tag-btn" onclick="setQuickMessage('Hi, I\'m David Warner. I have a sore throat and need an appointment for today.')">Sore Throat (Today)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Data and Agent Traces -->
+        <div class="glass-panel main-panel">
+            <div class="tabs-header">
+                <button class="tab-link active" onclick="switchTab(event, 'sheet-tab')">
+                    <i class="fa-solid fa-table"></i> Google Sheet Database
+                </button>
+                <button class="tab-link" onclick="switchTab(event, 'whatsapp-tab')">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp Log (Twilio)
+                </button>
+                <button class="tab-link" onclick="switchTab(event, 'trace-tab')">
+                    <i class="fa-solid fa-microchip"></i> Multi-Agent Traces
+                </button>
+            </div>
+
+            <!-- Tab 1: Google Sheet View -->
+            <div id="sheet-tab" class="tab-content active">
+                <div class="sheet-container">
+                    <div>
+                        <div class="sheet-header">
+                            <h3 class="sheet-title"><i class="fa-solid fa-circle-check"></i> Booked Appointments</h3>
+                            <button class="action-btn danger" onclick="clearLogsAndData()" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">
+                                <i class="fa-solid fa-trash-can"></i> Reset DB
+                            </button>
+                        </div>
+                        <table class="appointments-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Phone</th>
+                                    <th>Symptoms</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Reminder</th>
+                                    <th>Follow-up</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointments-body">
+                                <tr>
+                                    <td colspan="8" style="text-align: center; color: var(--text-muted);">No bookings yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div>
+                        <h3 class="sheet-title" style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-calendar-days"></i> Slot Availability (Next 3 Days)</h3>
+                        <div class="slots-grid" id="slots-grid-container">
+                            <!-- Slots will be filled dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: WhatsApp Messages Sent -->
+            <div id="whatsapp-tab" class="tab-content">
+                <div class="msg-history" id="messages-container">
+                    <div style="text-align: center; color: var(--text-muted); padding: 2rem;">No WhatsApp messages sent yet.</div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Multi-Agent Trace -->
+            <div id="trace-tab" class="tab-content">
+                <div class="trace-container">
+                    <div class="trace-filter">
+                        <button class="filter-btn active" onclick="filterLogs('all')">All logs</button>
+                        <button class="filter-btn" onclick="filterLogs('Intake Agent')">Agent 1: Intake</button>
+                        <button class="filter-btn" onclick="filterLogs('Scheduling Agent')">Agent 2: Scheduling</button>
+                        <button class="filter-btn" onclick="filterLogs('Reminder Agent')">Agent 3: Reminder</button>
+                        <button class="filter-btn" onclick="filterLogs('Return Visit Agent')">Agent 4: Return Visit</button>
+                    </div>
+                    <div class="trace-terminal" id="trace-terminal">
+                        <div class="trace-row">
+                            <div class="trace-header-row">
+                                <span class="trace-time">System Start</span>
+                                <span class="trace-agent system">Orchestrator</span>
+                                <span class="trace-type info">Info</span>
+                            </div>
+                            <div class="trace-body">Multi-Agent system loaded using Google ADK 2.0. Waiting for user interaction.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Action Center -->
+    <div class="controls-panel">
+        <div>
+            <h4 style="font-weight: 500; font-size: 0.9rem; color: var(--text-muted);">Background Agent Triggers</h4>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Simulate time passage / cron triggers</span>
+        </div>
+        <div class="agent-controls">
+            <button class="action-btn primary" id="reminder-btn" onclick="triggerReminderAgent()">
+                <i class="fa-solid fa-bell"></i> Trigger Agent 3 (24h Reminder Scan)
+            </button>
+            <button class="action-btn success" id="followup-btn" onclick="triggerFollowupAgent()">
+                <i class="fa-solid fa-arrows-spin"></i> Trigger Agent 4 (7d Followup Scan)
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentFilter = 'all';
+
+        // Load configuration and data on start
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchConfig();
+            fetchData();
+            // Poll for logs and messages every 2 seconds
+            setInterval(fetchData, 2000);
+        });
+
+        function fetchConfig() {
+            fetch('/api/config')
+                .then(res => res.json())
+                .then(config => {
+                    document.getElementById('gemini-status').innerText = config.gemini_api_key;
+                    document.getElementById('sheets-status').innerText = config.google_sheets;
+                    document.getElementById('twilio-status').innerText = config.twilio;
+
+                    // Light indicators
+                    const gemLight = document.getElementById('gemini-light');
+                    if (config.demo_mode) {
+                        gemLight.className = 'indicator sim';
+                    } else {
+                        gemLight.className = 'indicator active';
+                    }
+
+                    const twilioLight = document.getElementById('twilio-light');
+                    twilioLight.className = config.twilio === 'Configured' ? 'indicator active' : 'indicator sim';
+
+                    const sheetLight = document.getElementById('sheets-light');
+                    sheetLight.className = config.google_sheets === 'Configured' ? 'indicator active' : 'indicator sim';
+                });
+        }
+
+        function fetchData() {
+            // Fetch appointments
+            fetch('/api/appointments')
+                .then(res => res.json())
+                .then(apps => {
+                    const tbody = document.getElementById('appointments-body');
+                    if (apps.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No bookings yet.</td></tr>`;
+                    } else {
+                        tbody.innerHTML = apps.map(app => `
+                            <tr>
+                                <td>#${app.id}</td>
+                                <td><strong>${app.patient_name}</strong></td>
+                                <td>${app.phone}</td>
+                                <td>${app.symptoms}</td>
+                                <td><code>${app.date}</code></td>
+                                <td><span class="badge success" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border-color: rgba(59, 130, 246, 0.2);">${app.time}</span></td>
+                                <td>${app.reminder_sent ? '<span class="badge success">Sent</span>' : '<span class="badge warning">Pending</span>'}</td>
+                                <td>${app.followup_sent ? '<span class="badge success">Sent</span>' : '<span class="badge warning">Pending</span>'}</td>
+                            </tr>
+                        `).join('');
+                    }
+                });
+
+            // Fetch slots
+            fetch('/api/slots')
+                .then(res => res.json())
+                .then(slots => {
+                    const container = document.getElementById('slots-grid-container');
+                    container.innerHTML = '';
+                    
+                    // Show only first 3 dates for dashboard layout compactness
+                    const sortedDates = Object.keys(slots).sort().slice(0, 3);
+                    
+                    sortedDates.forEach(date => {
+                        const dateSection = document.createElement('div');
+                        dateSection.style.marginBottom = '1rem';
+                        
+                        const dateHeader = document.createElement('h4');
+                        dateHeader.style.fontSize = '0.8rem';
+                        dateHeader.style.color = 'var(--text-muted)';
+                        dateHeader.style.marginBottom = '0.4rem';
+                        dateHeader.innerText = date;
+                        dateSection.appendChild(dateHeader);
+                        
+                        const grid = document.createElement('div');
+                        grid.className = 'slots-grid';
+                        
+                        Object.entries(slots[date]).forEach(([time, status]) => {
+                            const isAvailable = status === 'Available';
+                            const card = document.createElement('div');
+                            card.className = `slot-card ${isAvailable ? 'available' : 'booked'}`;
+                            card.innerHTML = `
+                                <div><strong>${time}</strong></div>
+                                <div style="font-size: 0.7rem; color: ${isAvailable ? 'var(--success)' : 'var(--error)'}; margin-top: 0.2rem;">
+                                    ${isAvailable ? 'Available' : status}
+                                </div>
+                            `;
+                            grid.appendChild(card);
+                        });
+                        
+                        dateSection.appendChild(grid);
+                        container.appendChild(dateSection);
+                    });
+                });
+
+            // Fetch WhatsApp messages
+            fetch('/api/messages')
+                .then(res => res.json())
+                .then(msgs => {
+                    const container = document.getElementById('messages-container');
+                    if (msgs.length === 0) {
+                        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 2rem;">No WhatsApp messages sent yet.</div>`;
+                    } else {
+                        container.innerHTML = msgs.slice().reverse().map(msg => {
+                            let msgClass = 'confirm';
+                            if (msg.sender.includes('Reminder')) msgClass = 'reminder';
+                            if (msg.sender.includes('Return')) msgClass = 'followup';
+                            
+                            const senderInitials = msg.sender.substring(0, 2).toUpperCase();
+                            const cleanTime = new Date(msg.timestamp).toLocaleTimeString();
+                            
+                            return `
+                                <div class="whatsapp-card ${msgClass}">
+                                    <div class="avatar-circle">${senderInitials}</div>
+                                    <div class="msg-details">
+                                        <div class="msg-meta">
+                                            <span><strong>${msg.sender}</strong> to <strong>${msg.to}</strong></span>
+                                            <span>${cleanTime} (${msg.mode})</span>
+                                        </div>
+                                        <div class="msg-body">${msg.body}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                });
+
+            // Fetch Agent logs
+            fetch('/api/agent-logs')
+                .then(res => res.json())
+                .then(logs => {
+                    const terminal = document.getElementById('trace-terminal');
+                    const filtered = logs.filter(log => currentFilter === 'all' || log.agent.includes(currentFilter));
+                    
+                    terminal.innerHTML = filtered.map(log => {
+                        let agentClass = 'system';
+                        if (log.agent.includes('Intake')) agentClass = 'intake';
+                        else if (log.agent.includes('Scheduling')) agentClass = 'scheduling';
+                        else if (log.agent.includes('Reminder')) agentClass = 'reminder';
+                        else if (log.agent.includes('Return') || log.agent.includes('Visit')) agentClass = 'return';
+                        
+                        return `
+                            <div class="trace-row">
+                                <div class="trace-header-row">
+                                    <span class="trace-time">${log.timestamp}</span>
+                                    <span class="trace-agent ${agentClass}">${log.agent}</span>
+                                    <span class="trace-type ${log.type}">${log.type}</span>
+                                </div>
+                                <div class="trace-body">${log.content}</div>
+                            </div>
+                        `;
+                    }).join('');
+                });
+        }
+
+        function setQuickMessage(msg) {
+            document.getElementById('message-input').value = msg;
+        }
+
+        function switchTab(evt, tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        function filterLogs(agent) {
+            currentFilter = agent;
+            const buttons = document.querySelectorAll('.trace-filter .filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            fetchData();
+        }
+
+        function sendBookingRequest() {
+            const msgInput = document.getElementById('message-input');
+            const phoneInput = document.getElementById('phone-input');
+            const sendBtn = document.getElementById('send-btn');
+            
+            const message = msgInput.value.trim();
+            const phone = phoneInput.value.trim();
+            
+            if (!message) return;
+            
+            // Append to chat panel
+            const chatHistory = document.getElementById('chat-history');
+            const userBubble = document.createElement('div');
+            userBubble.className = 'message-bubble user';
+            userBubble.innerText = message;
+            chatHistory.appendChild(userBubble);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            msgInput.value = '';
+            
+            // Show loading bubble
+            const loadingBubble = document.createElement('div');
+            loadingBubble.className = 'message-bubble system';
+            loadingBubble.innerHTML = `<span class="loading-spinner"></span> <em>Orchestrating agents... Please watch the Multi-Agent Traces tab.</em>`;
+            chatHistory.appendChild(loadingBubble);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Switch to traces tab so they can see the agents working!
+            setTimeout(() => {
+                const traceTabLink = document.querySelector('.tab-link[onclick*="trace-tab"]');
+                if (traceTabLink) traceTabLink.click();
+            }, 500);
+            
+            // Call API
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message, phone })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // Remove loading bubble
+                chatHistory.removeChild(loadingBubble);
+                
+                const responseBubble = document.createElement('div');
+                responseBubble.className = 'message-bubble system';
+                if (data.status === 'success') {
+                    responseBubble.innerHTML = `
+                        <strong>Booking Confirmation:</strong><br>
+                        ${data.scheduling_response}<br><br>
+                        <span style="font-size:0.8rem; color:var(--text-muted);">
+                            Patient: ${data.extracted.patient_name}<br>
+                            Date: ${data.extracted.preferred_date}<br>
+                            Symptoms: ${data.extracted.symptoms}
+                        </span>
+                    `;
+                } else {
+                    responseBubble.innerText = "Apologies, I encountered an issue booking your appointment.";
+                }
+                chatHistory.appendChild(responseBubble);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                fetchData();
+            })
+            .catch(err => {
+                chatHistory.removeChild(loadingBubble);
+                console.error(err);
+            });
+        }
+
+        function triggerReminderAgent() {
+            const btn = document.getElementById('reminder-btn');
+            btn.innerHTML = `<span class="loading-spinner"></span> Scanning...`;
+            
+            fetch('/api/trigger-reminder', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    btn.innerHTML = `<i class="fa-solid fa-bell"></i> Trigger Agent 3 (24h Reminder Scan)`;
+                    
+                    // Switch to traces tab
+                    const traceTabLink = document.querySelector('.tab-link[onclick*="trace-tab"]');
+                    if (traceTabLink) traceTabLink.click();
+                    fetchData();
+                });
+        }
+
+        function triggerFollowupAgent() {
+            const btn = document.getElementById('followup-btn');
+            btn.innerHTML = `<span class="loading-spinner"></span> Scanning...`;
+            
+            fetch('/api/trigger-followup', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    btn.innerHTML = `<i class="fa-solid fa-arrows-spin"></i> Trigger Agent 4 (7d Followup Scan)`;
+                    
+                    // Switch to traces tab
+                    const traceTabLink = document.querySelector('.tab-link[onclick*="trace-tab"]');
+                    if (traceTabLink) traceTabLink.click();
+                    fetchData();
+                });
+        }
+
+        function clearLogsAndData() {
+            if (confirm("Are you sure you want to reset the database and clear all agent logs?")) {
+                fetch('/api/clear-logs', { method: 'POST' })
+                    .then(() => {
+                        fetch('/api/reset-db', { method: 'POST' })
+                            .then(() => fetchData());
+                        fetchData();
+                    });
+            }
+        }
+    </script>
+</body>
+</html>
