@@ -1,0 +1,130 @@
+[
+    {
+        "timestamp": "2026-06-27T06:19:25.539181",
+        "to": "whatsapp:+1987654321",
+        "from": "whatsapp:+14155238886",
+        "body": "Test confirmation message",
+        "sender": "Agent Test (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T08:34:23.059743",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello John, your healthcare appointment has been booked for 2026-06-28 at 10:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T08:50:42.470523",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello David, your healthcare appointment has been booked for 2026-06-27 at 09:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T10:35:54.253805",
+        "to": "whatsapp:+918318045726",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello Jane Doe, your healthcare appointment has been booked for 2026-06-28 at 11:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T22:51:11.452462",
+        "to": "whatsapp:+918318045726",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello Jane Doe, your healthcare appointment has been booked for 2026-06-27 at 10:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T23:00:21.002795",
+        "to": "whatsapp:+918182842144",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello John, your healthcare appointment has been booked for 2026-06-28 at 02:00 PM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T23:04:09.593448",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Reminder: Hello John, you have an appointment tomorrow, 2026-06-28 at 10:00 AM. Please remember to bring your prescription details.",
+        "sender": "Reminder Agent (Simulated) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T23:04:13.115240",
+        "to": "whatsapp:+918318045726",
+        "from": "whatsapp:+14155238886",
+        "body": "Reminder: Hello Jane Doe, you have an appointment tomorrow, 2026-06-28 at 11:00 AM. Please remember to bring your prescription details.",
+        "sender": "Reminder Agent (Simulated)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T23:04:15.961883",
+        "to": "whatsapp:+918182842144",
+        "from": "whatsapp:+14155238886",
+        "body": "Reminder: Hello John, you have an appointment tomorrow, 2026-06-28 at 02:00 PM. Please remember to bring your prescription details.",
+        "sender": "Reminder Agent (Simulated)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-27T23:05:04.692739",
+        "to": "whatsapp:+1 (555) 777-8888",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello Marcus Aurelius, it has been 7 days since your appointment. We hope you are feeling better. If you need a follow-up or a return visit, please book using our platform!",
+        "sender": "Return Visit Agent (Simulated) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-28T06:16:30.465438",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello Jane Doe, your healthcare appointment has been booked for 2026-06-29 at 09:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-28T06:21:26.291964",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello John, your healthcare appointment has been booked for 2026-06-29 at 09:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-28T07:11:29.442980",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello John, your healthcare appointment has been booked for 2026-06-29 at 09:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-28T07:12:02.855184",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello David, your healthcare appointment has been booked for 2026-06-28 at 09:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-28T07:12:27.118656",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello Alice, your healthcare appointment has been booked for 2026-06-30 at 09:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    },
+    {
+        "timestamp": "2026-06-28T07:13:55.185009",
+        "to": "whatsapp:+1 (555) 019-9999",
+        "from": "whatsapp:+14155238886",
+        "body": "Hello Alice, your healthcare appointment has been booked for 2026-06-30 at 09:00 AM. Please reply if you need to reschedule.",
+        "sender": "Scheduling Agent (Fallback Sim) (Twilio Fallback Mock)",
+        "mode": "Real (Twilio API)"
+    }
+]

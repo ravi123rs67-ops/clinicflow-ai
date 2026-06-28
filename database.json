@@ -1,0 +1,66 @@
+{
+    "appointments": [
+        {
+            "id": 1,
+            "patient_name": "John",
+            "phone": "+1 (555) 019-9999",
+            "symptoms": "Severe headache",
+            "date": "2026-06-29",
+            "time": "09:00 AM",
+            "status": "Booked",
+            "booked_at": "2026-06-28T07:11:26.678072",
+            "reminder_sent": false,
+            "followup_sent": false
+        },
+        {
+            "id": 2,
+            "patient_name": "David",
+            "phone": "+1 (555) 019-9999",
+            "symptoms": "Sore throat",
+            "date": "2026-06-28",
+            "time": "09:00 AM",
+            "status": "Booked",
+            "booked_at": "2026-06-28T07:11:59.451363",
+            "reminder_sent": false,
+            "followup_sent": false
+        },
+        {
+            "id": 3,
+            "patient_name": "Alice",
+            "phone": "+1 (555) 019-9999",
+            "symptoms": "Severe pain",
+            "date": "2026-06-30",
+            "time": "09:00 AM",
+            "status": "Booked",
+            "booked_at": "2026-06-28T07:13:53.482530",
+            "reminder_sent": false,
+            "followup_sent": false
+        }
+    ],
+    "slots": {
+        "2026-06-29": {
+            "09:00 AM": "Booked - John",
+            "10:00 AM": "Available",
+            "11:00 AM": "Available",
+            "02:00 PM": "Available",
+            "03:00 PM": "Available",
+            "04:00 PM": "Available"
+        },
+        "2026-06-28": {
+            "09:00 AM": "Booked - David",
+            "10:00 AM": "Available",
+            "11:00 AM": "Available",
+            "02:00 PM": "Available",
+            "03:00 PM": "Available",
+            "04:00 PM": "Available"
+        },
+        "2026-06-30": {
+            "09:00 AM": "Booked - Alice",
+            "10:00 AM": "Available",
+            "11:00 AM": "Available",
+            "02:00 PM": "Available",
+            "03:00 PM": "Available",
+            "04:00 PM": "Available"
+        }
+    }
+}
